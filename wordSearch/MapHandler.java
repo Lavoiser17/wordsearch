@@ -4,23 +4,24 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Search a word in Word-Search Puzzle
- * find the word x-times and returns a list with the coordinates of the words founded in the Puzzle:
- * Start-Coordinates - End-Coordinates.
+ * Search a word in Word-Search Puzzle find the word x-times and returns a list
+ * with the coordinates of the words founded in the Puzzle: Start-Coordinates -
+ * End-Coordinates.
+ * 2024-12-16
  */
 
 public class MapHandler {
 
-	static char[][] wordsearch;
-	static int rows;
-	static int columns;
+	private static char[][] wordSearch;
+	private static int rows;
+	private static int columns;
 	// {delta row, delta column }
-	static final int[][] DIRECTION = { { 0, 1 }, { 1, 1 }, { 1, 0 }, { 1, -1 }, { 0, -1 }, { -1, -1 }, { -1, 0 },
-			{ -1, 1 } };
+	private static final int[][] DIRECTION = { { 0, 1 }, { 1, 1 }, { 1, 0 }, { 1, -1 }, { 0, -1 }, { -1, -1 },
+			{ -1, 0 }, { -1, 1 } };
 
 	public void loadMap(String inputFile) {
 		List<String> lines = MapFile.loadLines(inputFile);
-	
+
 		for (int i = 0; i < lines.size(); i++) {
 			String s = lines.get(i).replace(" ", "");
 			s = s.toUpperCase();
@@ -44,7 +45,7 @@ public class MapHandler {
 				}
 			}
 		}
-		wordsearch = map;
+		wordSearch = map;
 	}
 
 	public List<int[]> findWord(String word) {
@@ -59,10 +60,10 @@ public class MapHandler {
 		for (int row = 0; row < rows; row++) {
 			for (int column = 0; column < columns; column++)
 
-				if (wordsearch[row][column] == word.charAt(0)) {
+				if (wordSearch[row][column] == word.charAt(0)) {
 
 					for (int dir = 0; dir < DIRECTION.length; dir++) {
-						//check the next letter
+						// check the next letter
 						if (findWordRecurs(row + DIRECTION[dir][0], column + DIRECTION[dir][1], word, 1, dir)) {
 							int[] resultCoordinates = { row, column, row + (word.length() - 1) * DIRECTION[dir][0],
 									column + (word.length() - 1) * DIRECTION[dir][1] };
@@ -77,7 +78,7 @@ public class MapHandler {
 	static private boolean findWordRecurs(int r, int c, String word, int stack, int dir) {
 		boolean result = false;
 		if (!isInSideMap(r, c)) {
-		} else if (wordsearch[r][c] != word.charAt(stack)) {
+		} else if (wordSearch[r][c] != word.charAt(stack)) {
 			result = false;
 		} else if (stack == word.length() - 1) {
 			result = true;
@@ -93,7 +94,15 @@ public class MapHandler {
 		return (row >= 0 && column >= 0 && row < rows && column < columns);
 	}
 
-	public char[][] getMap() {
-		return wordsearch;
+	@Override
+	public char[][] clone() {
+		char[][] wordsearchCopy = new char[rows][columns];
+		// deepcopy
+		for (int row = 0; row < rows; row++) {
+			for (int column = 0; column < columns; column++) {
+				wordsearchCopy[row][column] = wordSearch[row][column];
+			}
+		}
+		return wordsearchCopy;
 	}
 }

@@ -8,6 +8,7 @@ import java.util.List;
 
 /**
  * A Word-Search-Helper - GUI Interface
+ * 2024-12-16
  */
 public class WordSearchGUI {
 
@@ -23,7 +24,7 @@ public class WordSearchGUI {
 			System.exit(0);
 		}
 		map.loadMap(mapFile);
-		char[][] letters = map.getMap();
+		char[][] letters = map.clone();
 
 		// Main Frame
 		JFrame frame = new JFrame("WORDSEARCH HELPER");
@@ -54,6 +55,7 @@ public class WordSearchGUI {
 					if (result.size() == 0) {
 
 						JOptionPane.showMessageDialog(frame, "No match!");
+						letterPanel.repaint();
 
 					} else {
 						letterPanel.saveResults(result);
